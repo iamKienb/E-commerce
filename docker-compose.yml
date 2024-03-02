@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  mongo_db:
+    container_name: mongo_db
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - app-network  
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nodejs
+    restart: always
+    environment:
+       PORT: 8080
+       DB_HOST: "mongodb://mongo_db/shopDev"
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    depends_on:
+      - mongo_db
+    networks:
+      - app-network  
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+  node_modules:
