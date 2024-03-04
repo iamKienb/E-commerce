@@ -6,6 +6,10 @@ const cartRepository = new CartRepository()
 import { DiscountService } from "./discount.service";
 import { DiscountRepository } from '../repositories/discount.repository';
 import OrderModel from '../models/Order.model';
+import { CartService } from './cart.service';
+import { Types } from 'mongoose';
+const cartService = new CartService()
+
 const discountService = new DiscountService(new DiscountRepository)
 export class CheckoutService {
    
@@ -93,26 +97,37 @@ export class CheckoutService {
     }
 
 
-    async orderByUser(shop_order_ids:any, userId:number, cartId:string,user_address:string, user_payment:number){
+    async orderByUser(shop_order_ids:any, userId:number, cartId:string,user_address:string, user_payment:number, productId:string){
         const {shop_order_ids_new, checkout_order} = await new CheckoutService().checkoutReview({
             userId,
             cartId,
             shop_order_ids
         })
 
-        const products =  shop_order_ids_new.flatMap(order => order.item_products) as any
-        console.log(`[1]:`, products)
+        if(user_payment < checkout_order.totalCheckout ){
+            throw new HttpException(statusCode.EXPECTATION_FAILED, 'The money you give is not enough')
+        }
 
+        const order_payment = {
+            user_payment,
+            totalCheckout: checkout_order.totalCheckout,
+            surplusMoney: user_payment - checkout_order.totalCheckout
+        }
         const newOrder = await OrderModel.create({
             order_userId:userId,
             order_checkout:checkout_order,
             order_shipping:user_address,
-            order_products:shop_order_ids_new
+            order_products:shop_order_ids_new,
+            order_payment: order_payment
         })
-        
         // trường hợp thành công thì remove product in cart 
         if(newOrder){
             // remove product from cart
+            await cartService.deleteItemCart({userId, productId})
+        }
+        return {
+            checkout_order,
+            order_payment
         }
 
 
