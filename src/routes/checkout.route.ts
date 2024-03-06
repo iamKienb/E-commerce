@@ -10,6 +10,7 @@ import { CheckoutController } from '../controllers/checkout.controller';
 
 const checkoutRouter = express.Router();
 checkoutRouter.post('/review', asyncHandler(CheckoutController.checkoutReview))
+checkoutRouter.post('/orderReview', asyncHandler(CheckoutController.orderReview))
 
 
 

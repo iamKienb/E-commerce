@@ -8,9 +8,6 @@ export interface Order extends  mongoose.Document{
     order_shipping:object,
     order_payment:object,
     order_trackingNumber:string
-
-
-
 }
 
 
@@ -31,6 +28,7 @@ const orderSchema = new Schema<Order>({
             totalCheckout:0 // tổng thanh toán phải trả      
         }
     */
+
      order_shipping:{
         type:Object,
         default:{}

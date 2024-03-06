@@ -8,6 +8,7 @@ import { DiscountRepository } from '../repositories/discount.repository';
 import OrderModel from '../models/Order.model';
 import { CartService } from './cart.service';
 import { Types } from 'mongoose';
+import { unGetSelectData } from '../utils';
 const cartService = new CartService()
 
 const discountService = new DiscountService(new DiscountRepository)
@@ -97,7 +98,10 @@ export class CheckoutService {
     }
 
 
-    async orderByUser(shop_order_ids:any, userId:number, cartId:string,user_address:string, user_payment:number, productId:string){
+    async orderByUser({shop_order_ids, userId, cartId,user_address, user_payment}:{
+        shop_order_ids:any, userId:number, cartId:string,user_address:string, user_payment:any
+    }){
+        console.log('userid',userId)
         const {shop_order_ids_new, checkout_order} = await new CheckoutService().checkoutReview({
             userId,
             cartId,
@@ -113,22 +117,19 @@ export class CheckoutService {
             totalCheckout: checkout_order.totalCheckout,
             surplusMoney: user_payment - checkout_order.totalCheckout
         }
+        console.log()
+
         const newOrder = await OrderModel.create({
             order_userId:userId,
-            order_checkout:checkout_order,
-            order_shipping:user_address,
             order_products:shop_order_ids_new,
+            order_shipping:user_address,
+            order_checkout:checkout_order,
             order_payment: order_payment
         })
-        // trường hợp thành công thì remove product in cart 
-        if(newOrder){
-            // remove product from cart
-            await cartService.deleteItemCart({userId, productId})
-        }
-        return {
-            checkout_order,
-            order_payment
-        }
+        const selectProduct = ['__v' , 'order_products']
+        const unSelect = unGetSelectData(selectProduct) 
+        return await OrderModel.findOne({_id:newOrder._id}).select(unSelect)
+        
 
 
     }

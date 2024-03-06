@@ -11,4 +11,10 @@ export class CheckoutController {
         const data = await checkoutService.checkoutReview(body);
         return  res.status(statusCode.OK).json(new HttpResponse(statusCode.OK, 'checkout review success', data));
     }
+
+    static orderReview  = async(req:Request, res:Response, next:NextFunction) => {
+        const body = req.body;
+        const data = await checkoutService.orderByUser(body);
+        return  res.status(statusCode.OK).json(new HttpResponse(statusCode.OK, 'order success', data));
+    }
 }    

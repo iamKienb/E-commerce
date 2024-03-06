@@ -21,7 +21,7 @@ export const expressApp = (app: Express) => {
     app.use(compression());
 
     app.use(authenticationApiKey)        
-    // app.use(permission(PermissionsTypes.ZERO));  
+    app.use(permission(PermissionsTypes.ZERO));  
 
     //init routes
     app.use('/api/v1/inventory', inventoryRouter);
