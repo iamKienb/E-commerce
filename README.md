@@ -31,4 +31,5 @@ Make sure you have Docker installed on your machine. You can download it from [D
 
 1. Clone the repository:
 git clone https://github.com/iamKienb/E-commerce.git
+
 cd E-commerce  and run docker-compose up 
