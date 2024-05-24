@@ -16,6 +16,8 @@ export class ProductController{
             product_shop:req.user.id
 
         }) 
+
+        console.log("Created Product successfully", data)
         return res.status(statusCode.OK).json(data);
     }
 

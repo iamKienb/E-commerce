@@ -2,9 +2,11 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default{
-    db:{
-        dbHost: process.env.DB_HOST!,
+    app:{
         port:process.env.PORT!
+    },
+    db:{
+        url: process.env.DB_URL!,
     }
 
 }

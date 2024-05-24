@@ -16,9 +16,6 @@ services:
       dockerfile: Dockerfile
     container_name: nodejs
     restart: always
-    environment:
-       PORT: 8080
-       DB_HOST: "mongodb://mongo_db/shopDev"
     ports:
       - "8080:8080"
     volumes:
@@ -28,6 +25,17 @@ services:
       - mongo_db
     networks:
       - app-network  
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - app-network  
+    
 
 networks:
   app-network:

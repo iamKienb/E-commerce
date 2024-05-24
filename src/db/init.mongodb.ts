@@ -3,10 +3,11 @@ import config from '../config';
 
 
 export default function connectDB() {
-  const url = config.db.dbHost
- 
+  const url = config.db.url
   try {
-    mongoose.connect(url);
+    mongoose.connect(url || "" , {
+      dbName: "SHOP_DEV"
+    });
   } catch (err:any) {
     console.error(err.message);
     process.exit(1);
