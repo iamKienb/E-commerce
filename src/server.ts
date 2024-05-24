@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import config from "./config";
 import connectDB from './db/init.mongodb'
 
-const PORT = +config.db.port! | 8080;
+const PORT = +config.app.port! | 8080;
 dotenv.config();
 
 const startApp = async (app: Express) => {

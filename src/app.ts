@@ -11,7 +11,9 @@ import productRouter from "./routes/product.route";
 import cartRouter from "./routes/cart.route";
 import checkoutRouter from "./routes/checkout.route";
 import discountRouter from "./routes/discount.route";
+import uploadRouter from "./routes/upload.route";
 import inventoryRouter from "./routes/inventory.route";
+
 export const expressApp = (app: Express) => {
     //init middlewares
     app.use(cors({ origin: "*" }));
@@ -19,6 +21,9 @@ export const expressApp = (app: Express) => {
     app.use(morgan("dev"))
     app.use(helmet())
     app.use(compression());
+
+
+    app.use('/api/v1/product', productRouter);
 
     app.use(authenticationApiKey)        
     app.use(permission(PermissionsTypes.ZERO));  
@@ -28,13 +33,14 @@ export const expressApp = (app: Express) => {
     app.use('/api/v1/checkout', checkoutRouter);
     app.use('/api/v1/cart', cartRouter);
     app.use('/api/v1/discount', discountRouter);
-    app.use('/api/v1/product', productRouter);
+    app.use('/api/v1/upload', uploadRouter);
     app.use('/api/v1/auth', authRouter);
     
-
 
     //handle error
     app.use(errorHandler)
 
 
 };
+
+  
