@@ -24,7 +24,9 @@ export const expressApp = (app: Express) => {
 
 
     app.use('/api/v1/product', productRouter);
-
+    app.use('/', (req, res) => {
+        res.send("WELCOME BACK MY FRIEND, HOW YOU DO DUE")
+    })
     app.use(authenticationApiKey)        
     app.use(permission(PermissionsTypes.ZERO));  
 
